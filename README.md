@@ -1,0 +1,2 @@
+# lightning-cli-template
+ 
