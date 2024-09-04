@@ -1,0 +1,47 @@
+data:
+  class_path: src.datamodules.example_datamodule.D1DataModule
+  init_args:
+    batch_size: 32
+    num_workers: 0
+    drop_last: True
+    training: True
+    dataset: example_dataset
+    pin_mem: True
+model:
+  class_path: src.lightning_modules.example_module.ExampleModule
+  init_args:
+    model_params:
+      input_size: 100
+      hidden_size: 512
+      num_layers: 8
+      output_size: 1
+    criterion:
+      class_path: torch.nn.BCEWithLogitsLoss
+trainer:
+  check_val_every_n_epoch: 1
+  precision: 32
+  accelerator: gpu
+  # logger:
+  #   class_path: lightning.pytorch.loggers.WandbLogger
+  #   init_args:
+  #     name: delete_this
+  #     project: cogen-project
+  #     log_model: True
+  #     save_dir: ./logs
+  max_epochs: 5000
+  callbacks:
+    class_path: EarlyStopping
+    init_args:
+      monitor: val_loss
+      patience: 50
+optimizer:
+  class_path: AdamW
+  init_args:
+    lr: 0.0002
+    weight_decay: 0.00001
+lr_scheduler:
+  class_path: ReduceLROnPlateau
+  init_args:
+    monitor: val_loss
+    patience: 2
+    mode: min
